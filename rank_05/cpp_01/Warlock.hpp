@@ -23,6 +23,7 @@ class Warlock {
 		void	setTitle(std::string const &_title);
 
 		void	introduce() const;
+
 };
 
 #endif
