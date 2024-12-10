@@ -1,29 +1,28 @@
-#ifndef WARLOCK_HPP
-# define WARLOCK_HPP
+#pragma once
 
 #include <iostream>
-#include <string.h>
+#include <map>
+
+#include "ASpell.hpp"
 
 class Warlock {
 
-	private:
-		std::string     name;
-		std::string		title;
-		Warlock ();
-		Warlock (Warlock const &obj);
-		Warlock		&operator=(Warlock const &obj);
+    private:
+        std::string _name;
+        std::string _title;
+        std::map<std::string, ASpell*> _SpellBook;
+        Warlock();
+        Warlock & operator=(Warlock const& obj);
+        Warlock(Warlock const& obj);
 
-	public:
-		Warlock (const std::string _name, const std::string _title);
-		~Warlock();
-
-		std::string	const & getName() const;
-		std::string	const & getTitle() const;
-
-		void	setTitle(std::string const &_title);
-
-		void	introduce() const;
-
+    public:
+        Warlock(std::string name, std::string title);
+        ~Warlock();
+        std::string const& getName() const;
+        std::string const& getTitle() const;
+        void setTitle(std::string const& str);
+        void introduce() const;
+        void learnSpell(ASpell* obj);
+        void forgetSpell(std::string str);
+        void launchSpell(std::string str, ATarget const& obj);
 };
-
-#endif

@@ -1,66 +1,77 @@
 #include "Warlock.hpp"
 
-//canonical functions
 Warlock::Warlock() {
 
-	std::cout << "Default Warlock constructor was called" << std::endl;
-
-	return;
 }
 
-Warlock::Warlock (const std::string _name, const std::string _title) {
+Warlock::Warlock(std::string name, std::string title) {
 
-	this->name = _name;
-	this->title = _title;
-	std::cout << this->name << ": This looks like another boring day." << std::endl;
-
-	return;
-}
-
-Warlock::Warlock (Warlock const &obj) {
-
-	*this = obj;
-
-	return;
+    _name = name;
+    _title = title;
+    std::cout << _name << ": This looks like another boring day." << std::endl;
 }
 
 Warlock::~Warlock() {
 
-	std::cout << this->name << ": My job here is done!" << std::endl;
-
-	return;
+    std::cout << _name << ": My job here is done!" << std::endl;
+    for (std::map<std::string, ASpell*>::iterator it = _SpellBook.begin(); it != _SpellBook.end(); ++it) {
+        delete it->second;
+    }
+    _SpellBook.clear();
 }
 
-Warlock		&Warlock::operator=(Warlock const &obj) {
+Warlock & Warlock::operator=(Warlock const& obj) {
 
-	this->name = obj.name;
-	this->title = obj.title;
-
-	return *this;
+    _name = obj._name;
+    _title = obj._title;
+    return *this;
 }
 
-//getters & setters
-std::string		const & Warlock::getName() const {
+Warlock::Warlock(Warlock const& obj) {
 
-	return this->name;
+    *this = obj;
 }
 
-std::string		const &Warlock::getTitle() const {
+std::string const& Warlock::getName() const {
 
-	return this->title;
+    return _name;
 }
 
-void		Warlock::setTitle(std::string const &_title) {
+std::string const& Warlock::getTitle() const {
 
-	this->title = _title;
-
-	return;
+    return _title;
 }
 
-//methods
-void		Warlock::introduce() const {
+void Warlock::setTitle(std::string const& str) {
 
-	std::cout << this->name << ": I am " << this->name << ", " << this->title << std::endl;
+    _title = str;
+}
 
-	return; 
+void Warlock::introduce() const {
+
+    std::cout << _name << ": I am " << _name << ", " << _title << "!" << std::endl;
+}
+
+void Warlock::learnSpell(ASpell* obj) {
+
+    if (obj) {
+        if (_SpellBook.find(obj->getName()) == _SpellBook.end()) {
+            _SpellBook[obj->getName()] = obj->clone();
+        }
+    }
+}
+
+void Warlock::forgetSpell(std::string str) {
+
+    if (_SpellBook.find(str) != _SpellBook.end()) {
+        delete _SpellBook[str];
+        _SpellBook.erase(str);
+    }
+}
+
+void Warlock::launchSpell(std::string str, ATarget const& obj) {
+
+    if (_SpellBook.find(str) != _SpellBook.end()) {
+        _SpellBook[str]->launch(obj);
+    }
 }
